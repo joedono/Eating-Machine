@@ -1,0 +1,7 @@
+SCREEN_WIDTH = 800;
+SCREEN_HEIGHT = 600;
+FULLSCREEN = false;
+
+KEY_QUIT = "escape";
+
+GAMEPAD_QUIT = "back";
