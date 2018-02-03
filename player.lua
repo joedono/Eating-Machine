@@ -15,6 +15,11 @@ Player = Class {
 
     BumpWorld:add(self, self.box.x, self.box.y, self.box.w, self.box.h);
 
+    self.image = love.graphics.newImage("asset/image/player.png");
+    self.imageData = { w = 80, h = 80 };
+    local grid = Anim8.newGrid(80, 80, self.image:getWidth(), self.image:getHeight());
+    self.animation = Anim8.newAnimation(grid("1-2", 1), 0.3);
+
     self:resetKeys();
 
     self.active = true;
@@ -39,6 +44,7 @@ function Player:update(dt)
   self:updateVelocity();
   self:updateRotation();
   self:updatePosition(dt);
+  self:updateAnimation(dt);
 end
 
 function Player:updateVelocity()
@@ -100,7 +106,24 @@ function Player:updatePosition(dt)
   self.box.y = actualY;
 end
 
+function Player:updateAnimation(dt)
+  self.animation:update(dt);
+end
+
 function Player:draw()
-  love.graphics.setColor(0, 255, 0);
-  love.graphics.rectangle("fill", self.box.x, self.box.y, self.box.w, self.box.h);
+  love.graphics.setColor(0, 0, 0, 100);
+
+  local rotation = math.angle(0, 0, self.facing.y, self.facing.x);
+  self.animation:draw(
+    self.image,
+    self.box.x + self.box.w / 2, self.box.y + self.box.h / 2,
+    rotation,
+    PLAYER_SCALE, PLAYER_SCALE,
+    self.imageData.w / 2, self.imageData.h / 2
+  );
+
+  if DRAW_BOXES then
+    love.graphics.setColor(255, 255, 255);
+    love.graphics.rectangle("line", self.box.x, self.box.y, self.box.w, self.box.h);
+  end
 end

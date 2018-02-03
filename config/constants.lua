@@ -2,6 +2,8 @@ SCREEN_WIDTH = 600;
 SCREEN_HEIGHT = 600;
 FULLSCREEN = false;
 
+DRAW_BOXES = false;
+
 KEY_LEFT = "left";
 KEY_RIGHT = "right";
 KEY_UP = "up";
@@ -18,10 +20,11 @@ GAMEPAD_QUIT = "back";
 
 GAMEPAD_DEADZONE = 0.75;
 
+PLAYER_SWIM_SPEED = 200;
+PLAYER_SCALE = 1;
 PLAYER_INITIAL_DIMENSIONS = {
   x = 100,
   y = 100,
-  w = 100,
-  h = 100
+  w = 40,
+  h = 40
 };
-PLAYER_SWIM_SPEED = 300;
