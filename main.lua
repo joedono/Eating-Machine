@@ -8,9 +8,11 @@ Inspect = require "lib/inspect";
 
 require "lib/general";
 
+require "config/collisions";
 require "config/constants";
 
 require "state/state-game";
+require "state/state-pause";
 require "state/state-splash-hive";
 require "state/state-splash-love";
 require "state/state-title";
