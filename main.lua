@@ -2,6 +2,7 @@ Anim8 = require "lib/anim8";
 Class = require "lib/hump/class";
 GameState = require "lib/hump/gamestate";
 Vector = require "lib/hump/vector";
+Timer = require "lib/hump/timer";
 Bump = require "lib/bump";
 Inspect = require "lib/inspect";
 
@@ -10,6 +11,9 @@ require "lib/general";
 require "config/constants";
 
 require "state/state-game";
+require "state/state-splash-hive";
+require "state/state-splash-love";
+require "state/state-title";
 
 function love.load()
 	love.window.setFullscreen(FULLSCREEN);
