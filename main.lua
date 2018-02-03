@@ -13,7 +13,7 @@ require "state/state-game";
 
 function love.load()
 	love.window.setFullscreen(FULLSCREEN);
-	love.mouse.setVisible(false);
+	love.mouse.setVisible(true);
 	love.graphics.setDefaultFilter("nearest", "nearest");
 
   CANVAS = love.graphics.newCanvas(SCREEN_WIDTH, SCREEN_HEIGHT);

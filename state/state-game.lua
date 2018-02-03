@@ -2,6 +2,8 @@ State_Game = {};
 
 function State_Game:init()
 	BumpWorld = Bump.newWorld(32);
+
+	self.oceanImage = love.graphics.newImage("asset/image/ocean.png");
 end
 
 function State_Game:focus(focused)
@@ -51,7 +53,7 @@ function State_Game:draw()
 	CANVAS:renderTo(function()
 		love.graphics.clear();
     love.graphics.setColor(255, 255, 255);
-    love.graphics.print("Do something", 0, 0);
+    love.graphics.draw(self.oceanImage, 0, 0);
   end);
 
   love.graphics.setColor(255, 255, 255);
