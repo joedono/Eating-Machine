@@ -53,6 +53,10 @@ function State_Game:keypressed(key, unicode)
     self.player.downPressed = true;
   end
 
+	if key == KEY_BITE then
+		self.player.bitePressed = true;
+	end
+
 	if key == KEY_START then
 		GameState.push(State_Pause);
 	end
@@ -78,6 +82,10 @@ function State_Game:keyreleased(key, unicode)
   if key == KEY_DOWN then
     self.player.downPressed = false;
   end
+
+	if key == KEY_BITE then
+		self.player.bitePressed = false;
+	end
 end
 
 function State_Game:gamepadpressed(joystick, button)
@@ -100,6 +108,10 @@ function State_Game:gamepadpressed(joystick, button)
   if button == GAMEPAD_DOWN then
     self.player.downPressed = true;
   end
+
+	if button == GAMEPAD_BITE then
+		self.player.bitePressed = true;
+	end
 
 	if button == GAMEPAD_START then
 		GameState.push(State_Pause);
@@ -126,6 +138,10 @@ function State_Game:gamepadreleased(joystick, button)
   if button == GAMEPAD_DOWN then
     self.player.downPressed = false;
   end
+
+	if button == GAMEPAD_BITE then
+		self.player.bitePressed = false;
+	end
 end
 
 function State_Game:gamepadaxis(joystick, axis, value)

@@ -11,7 +11,7 @@ Player = Class {
 
     self.velocity = { x = 0, y = 0 };
     self.gamepadVelocity = { x = 0, y = 0 };
-    self.facing = { x = 0, y = 0, };
+    self.facing = { x = 1, y = 0, };
 
     BumpWorld:add(self, self.box.x, self.box.y, self.box.w, self.box.h);
 
@@ -32,6 +32,7 @@ function Player:resetKeys()
   self.rightPressed = false;
   self.upPressed = false;
   self.downPressed = false;
+  self.bitePressed = false;
 
   self.gamepadVelocity = { x = 0, y = 0 };
 end
@@ -45,6 +46,10 @@ function Player:update(dt)
   self:updateRotation();
   self:updatePosition(dt);
   self:updateAnimation(dt);
+
+  if self.bitePressed then
+    self:bite(dt);
+  end
 end
 
 function Player:updateVelocity()
@@ -110,6 +115,12 @@ function Player:updateAnimation(dt)
   self.animation:update(dt);
 end
 
+function Player:bite(dt)
+  local victims, len = BumpWorld:queryRect(self.box.x + self.facing.x * 45, self.box.y + self.facing.y * 45, 32, 32, victimFilter);
+
+  -- TODO
+end
+
 function Player:draw()
   love.graphics.setColor(0, 0, 0, 100);
 
@@ -125,5 +136,16 @@ function Player:draw()
   if DRAW_BOXES then
     love.graphics.setColor(255, 255, 255);
     love.graphics.rectangle("line", self.box.x, self.box.y, self.box.w, self.box.h);
+
+    if self.bitePressed then
+      love.graphics.setColor(255, 0, 0);
+    else
+      love.graphics.setColor(255, 255, 255);
+    end
+    love.graphics.rectangle("line",
+      self.box.x + self.facing.x * 45,
+      self.box.y + self.facing.y * 45,
+      32, 32
+    );
   end
 end

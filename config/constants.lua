@@ -8,6 +8,7 @@ KEY_LEFT = "left";
 KEY_RIGHT = "right";
 KEY_UP = "up";
 KEY_DOWN = "down";
+KEY_BITE = "z";
 KEY_QUIT = "escape";
 KEY_START = "return";
 
@@ -15,6 +16,7 @@ GAMEPAD_LEFT = "dpleft";
 GAMEPAD_RIGHT = "dpright";
 GAMEPAD_UP = "dpup";
 GAMEPAD_DOWN = "dpdown";
+GAMEPAD_BITE = "a";
 GAMEPAD_START = "start";
 GAMEPAD_QUIT = "back";
 
