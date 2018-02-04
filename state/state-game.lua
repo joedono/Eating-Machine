@@ -1,5 +1,7 @@
 require "player";
 
+require "prey/manager-prey";
+
 State_Game = {};
 
 function State_Game:init()
@@ -14,6 +16,7 @@ end
 
 function State_Game:enter()
 	self.player = Player(self);
+	self.preyManager = Manager_Prey(self);
 
 	self.oceanWavePosition = 0;
 	self.oceanWaveDirection = -1;
@@ -169,6 +172,7 @@ function State_Game:update(dt)
 
 	self.oceanWaveTimer:update(dt);
 	self.player:update(dt);
+	self.preyManager:update(dt);
 
 	self.hunger = self.hunger - HUNGER_RATE * dt;
 	if self.hunger <= 0 then
@@ -197,6 +201,7 @@ function State_Game:draw()
     love.graphics.draw(self.oceanImage, 0, self.oceanWavePosition);
 
 		self.player:draw();
+		self.preyManager:draw();
 
 		love.graphics.setFont(self.hudFont);
 		love.graphics.setColor(255, 255, 255);
