@@ -98,7 +98,7 @@ function Player:updatePosition(dt)
   local dy = self.box.y + self.velocity.y * dt;
 
   dx = math.clamp(dx, 0, SCREEN_WIDTH - self.box.w);
-  dy = math.clamp(dy, 0, SCREEN_HEIGHT - self.box.h);
+  dy = math.clamp(dy, 0, SCREEN_HEIGHT - BEACH_TOP - self.box.h);
 
   local actualX, actualY, cols, len = BumpWorld:move(self, dx, dy, playerCollision);
 

@@ -6,12 +6,18 @@ function State_Game:init()
 	BumpWorld = Bump.newWorld(32);
 
 	self.oceanImage = love.graphics.newImage("asset/image/ocean.png");
+	self.beachImage = love.graphics.newImage("asset/image/beach.png");
 
 	self.active = true;
 end
 
 function State_Game:enter()
 	self.player = Player(self);
+
+	self.oceanWavePosition = 0;
+	self.oceanWaveDirection = -1;
+	self.oceanWaveTimer = Timer.new();
+	self.oceanWaveTimer:every(0.75, function() self:moveOceanWaves(); end);
 end
 
 function State_Game:focus(focused)
@@ -137,14 +143,25 @@ function State_Game:update(dt)
     return;
   end
 
+	self.oceanWaveTimer:update(dt);
 	self.player:update(dt);
+end
+
+function State_Game:moveOceanWaves()
+	self.oceanWavePosition = self.oceanWavePosition + self.oceanWaveDirection * OCEAN_MOVE_RATE;
+	if self.oceanWavePosition == 0 then
+		self.oceanWaveDirection = -1;
+	elseif self.oceanWavePosition == -OCEAN_MOVE_RATE * 3 then
+		self.oceanWaveDirection = 1;
+	end
 end
 
 function State_Game:draw()
 	CANVAS:renderTo(function()
 		love.graphics.clear();
     love.graphics.setColor(255, 255, 255);
-    love.graphics.draw(self.oceanImage, 0, 0);
+		love.graphics.draw(self.beachImage, 0, 0);
+    love.graphics.draw(self.oceanImage, 0, self.oceanWavePosition);
 
 		self.player:draw();
   end);
