@@ -24,6 +24,10 @@ function State_Game:enter()
 	self.attention = 0;
 end
 
+function State_Game:resume()
+	self.player:resetKeys();
+end
+
 function State_Game:focus(focused)
   if focused then
     self.active = true;
