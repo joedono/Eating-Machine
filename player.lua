@@ -11,7 +11,7 @@ Player = Class {
 
     self.velocity = { x = 0, y = 0 };
     self.gamepadVelocity = { x = 0, y = 0 };
-    self.facing = { x = 1, y = 0, };
+    self.facing = { x = 1, y = 0 };
 
     BumpWorld:add(self, self.box.x, self.box.y, self.box.w, self.box.h);
 
