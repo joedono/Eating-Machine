@@ -7,5 +7,13 @@ swimmerCollision = function(swimmer, other)
 end
 
 victimFilter = function(other)
+  if other.type == "swimmer" then
+    return true;
+  end
+
+  if other.type == "corpse" then
+    return true;
+  end
+  
   return false;
 end

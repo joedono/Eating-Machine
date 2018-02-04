@@ -118,7 +118,16 @@ end
 function Player:bite(dt)
   local victims, len = BumpWorld:queryRect(self.box.x + self.facing.x * 45, self.box.y + self.facing.y * 45, 32, 32, victimFilter);
 
-  -- TODO
+  for i = 1, len do
+    local victim = victims[i];
+    if victim.type == "swimmer" then
+      self.parentStateGame:spawnCorpse(victim.box.x, victim.box.y);
+      victim.active = false;
+    elseif victim.type == "corpse" then
+      victim:eat(dt)
+      self.parentStateGame:eatCorpse(dt);
+    end
+  end
 end
 
 function Player:draw()

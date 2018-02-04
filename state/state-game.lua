@@ -174,7 +174,7 @@ function State_Game:update(dt)
 	self.player:update(dt);
 	self.preyManager:update(dt);
 
-	self.hunger = self.hunger - HUNGER_RATE * dt;
+	self.hunger = self.hunger - dt * HUNGER_RATE;
 	if self.hunger <= 0 then
 		self:loseGame();
 	end
@@ -187,6 +187,15 @@ function State_Game:moveOceanWaves()
 	elseif self.oceanWavePosition == -OCEAN_MOVE_RATE * 3 then
 		self.oceanWaveDirection = 1;
 	end
+end
+
+function State_Game:spawnCorpse(x, y)
+	self.preyManager:spawnCorpse(x, y);
+end
+
+function State_Game:eatCorpse(dt)
+	self.hunger = self.hunger + dt * EAT_RATE;
+	self.hunger = math.clamp(self.hunger, 0, 100);
 end
 
 function State_Game:loseGame()
