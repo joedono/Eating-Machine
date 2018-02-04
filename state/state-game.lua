@@ -8,6 +8,7 @@ function State_Game:init()
 	self.oceanImage = love.graphics.newImage("asset/image/ocean.png");
 	self.beachImage = love.graphics.newImage("asset/image/beach.png");
 
+	self.hudFont = love.graphics.newFont(14);
 	self.active = true;
 end
 
@@ -18,6 +19,9 @@ function State_Game:enter()
 	self.oceanWaveDirection = -1;
 	self.oceanWaveTimer = Timer.new();
 	self.oceanWaveTimer:every(0.75, function() self:moveOceanWaves(); end);
+
+	self.hunger = 100;
+	self.attention = 0;
 end
 
 function State_Game:focus(focused)
@@ -145,6 +149,11 @@ function State_Game:update(dt)
 
 	self.oceanWaveTimer:update(dt);
 	self.player:update(dt);
+
+	self.hunger = self.hunger - HUNGER_RATE * dt;
+	if self.hunger <= 0 then
+		self:loseGame();
+	end
 end
 
 function State_Game:moveOceanWaves()
@@ -156,6 +165,10 @@ function State_Game:moveOceanWaves()
 	end
 end
 
+function State_Game:loseGame()
+	-- TODO
+end
+
 function State_Game:draw()
 	CANVAS:renderTo(function()
 		love.graphics.clear();
@@ -164,6 +177,19 @@ function State_Game:draw()
     love.graphics.draw(self.oceanImage, 0, self.oceanWavePosition);
 
 		self.player:draw();
+
+		love.graphics.setFont(self.hudFont);
+		love.graphics.setColor(255, 255, 255);
+		love.graphics.print("Hunger", 5, 5);
+		love.graphics.print("Attention", 5, 30);
+
+		love.graphics.setColor(255, 0, 0);
+		love.graphics.rectangle("fill", 80, 5, self.hunger, 18);
+		love.graphics.setColor(255, 255, 0);
+		love.graphics.rectangle("fill", 80, 30, self.attention, 18);
+		love.graphics.setColor(255, 255, 255);
+		love.graphics.rectangle("line", 80, 5, 100, 18);
+		love.graphics.rectangle("line", 80, 30, 100, 18);
   end);
 
   love.graphics.setColor(255, 255, 255);
