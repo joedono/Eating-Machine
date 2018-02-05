@@ -190,6 +190,7 @@ function State_Game:moveOceanWaves()
 end
 
 function State_Game:spawnCorpse(x, y)
+	self.attention = self.attention + ATTENTION_RATE;
 	self.preyManager:spawnCorpse(x, y);
 end
 
