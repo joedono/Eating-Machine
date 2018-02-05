@@ -9,7 +9,19 @@ Manager_Prey = Class {
     local swimmerGrid = Anim8.newGrid(32, 32, self.swimmerImage:getWidth(), self.swimmerImage:getHeight());
     self.swimmerAnimation = Anim8.newAnimation(swimmerGrid("1-2", 1), 0.3);
 
-    self.corpseImage = nil;
+    local bloodImage = love.graphics.newImage("asset/image/effect/corpse-blood.png");
+    self.bloodEffect = love.graphics.newParticleSystem(bloodImage, 100);
+    self.bloodEffect:setColors(
+      150, 0, 0, 100,
+      200, 0, 0, 150,
+      200, 0, 0, 100,
+      150, 0, 0, 0
+    );
+    self.bloodEffect:setEmissionRate(20);
+    self.bloodEffect:setInsertMode("bottom");
+    self.bloodEffect:setLinearAcceleration(-10, -5, 10, 5);
+    self.bloodEffect:setParticleLifetime(3, 4);
+    self.bloodEffect:setSizes(0.5, 2);
 
     self.swimmers = {};
     self.swimmerSpawnTimer = 0;
@@ -41,7 +53,7 @@ function Manager_Prey:spawnSwimmer()
 end
 
 function Manager_Prey:spawnCorpse(x, y)
-	table.insert(self.corpses, Corpse(self, x, y, self.corpseImage));
+	table.insert(self.corpses, Corpse(self, x, y, self.bloodEffect));
 end
 
 function Manager_Prey:updateSwimmers(dt)

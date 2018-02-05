@@ -1,7 +1,8 @@
 Corpse = Class {
-  init = function (self, parentManager, x, y, image)
+  init = function (self, parentManager, x, y, bloodEffect)
     self.parentManager = parentManager;
-    self.image = image;
+    self.bloodEffect = bloodEffect:clone();
+    self.bloodEffect:start();
 
     self.box = {
       x = x,
@@ -25,10 +26,10 @@ function Corpse:update(dt)
 
   if self.aliveTimer < 0 then
     self.active = false;
+    self.bloodEffect:stop();
   else
     self.aliveTimer = self.aliveTimer - dt;
-
-    -- TODO
+    self.bloodEffect:update(dt);
   end
 end
 
@@ -39,7 +40,5 @@ function Corpse:eat(dt)
 end
 
 function Corpse:draw()
-  -- TODO
-  love.graphics.setColor(255, 0, 0);
-  love.graphics.rectangle("fill", self.box.x, self.box.y, self.box.w, self.box.h);
+  love.graphics.draw(self.bloodEffect, self.box.x + self.box.w / 2, self.box.y + self.box.h / 2);
 end
