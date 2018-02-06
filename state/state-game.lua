@@ -175,7 +175,7 @@ function State_Game:update(dt)
 	self.oceanWaveTimer:update(dt);
 	self.player:update(dt);
 	self.preyManager:update(dt);
-	self.hunterManager:update(dt);
+	self.hunterManager:update(dt, self.attention);
 
 	self.hunger = self.hunger - dt * HUNGER_RATE;
 	if self.hunger <= 0 then
@@ -195,6 +195,10 @@ end
 function State_Game:spawnCorpse(x, y)
 	self.attention = self.attention + ATTENTION_RATE;
 	self.preyManager:spawnCorpse(x, y);
+
+	if self.attention > 100 then
+		self.attention = 100;
+	end
 end
 
 function State_Game:eatCorpse(dt)

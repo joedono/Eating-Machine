@@ -6,7 +6,7 @@ Manager_Hunter = Class {
   end
 }
 
-function Manager_Hunter:update(dt)
+function Manager_Hunter:update(dt, attention)
 end
 
 function Manager_Hunter:draw()
