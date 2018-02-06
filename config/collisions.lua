@@ -3,6 +3,10 @@ playerCollision = function(player, other)
 end
 
 swimmerCollision = function(swimmer, other)
+  if other.type == "corpse" then
+    return "cross";
+  end
+  
   return nil;
 end
 
@@ -14,6 +18,6 @@ victimFilter = function(other)
   if other.type == "corpse" then
     return true;
   end
-  
+
   return false;
 end

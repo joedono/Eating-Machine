@@ -5,8 +5,8 @@ Corpse = Class {
     self.bloodEffect:start();
 
     self.box = {
-      x = x,
-      y = y,
+      x = x - CORPSE_SIZE / 2,
+      y = y - CORPSE_SIZE / 2,
       w = CORPSE_SIZE,
       h = CORPSE_SIZE
     };
@@ -41,4 +41,9 @@ end
 
 function Corpse:draw()
   love.graphics.draw(self.bloodEffect, self.box.x + self.box.w / 2, self.box.y + self.box.h / 2);
+
+  if DRAW_BOXES then
+    love.graphics.setColor(0, 0, 255);
+    love.graphics.rectangle("fill", self.box.x, self.box.y, self.box.w, self.box.h);
+  end
 end

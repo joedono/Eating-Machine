@@ -83,6 +83,19 @@ function Swimmer:updateSwimming(dt)
 end
 
 function Swimmer:updateFleeing(dt)
+  local vx = self.box.x - self.fleeTarget.x;
+  local vy = self.box.y - self.fleeTarget.y;
+  vx, vy = math.normalize(vx, vy);
+  self.velocity.x = vx * SWIMMER_SPEED;
+  self.velocity.y = vy * SWIMMER_SPEED;
+
+
+  if self.stateTimer <= 0 then
+    self.state = "treading";
+    self.facing = { x = 0, y = -1 };
+    self.velocity = { x = 0, y = 0 };
+    self.stateTimer = love.math.random(4, 10);
+  end
 end
 
 function Swimmer:updatePosition(dt)
@@ -93,6 +106,21 @@ function Swimmer:updatePosition(dt)
   dy = math.clamp(dy, 0, SCREEN_HEIGHT - self.box.h);
 
   local actualX, actualY, cols, len = BumpWorld:move(self, dx, dy, swimmerCollision);
+
+  for i = 1, len do
+    col = cols[i];
+    if col.other.type == "corpse" then
+      self.fleeTarget = {
+        x = col.other.box.x,
+        y = col.other.box.y
+      };
+
+      self.state = "fleeing";
+      self.facing = { x = 0, y = -1 };
+      self.velocity = { x = 0, y = 0 };
+      self.stateTimer = 3;
+    end
+  end
 
   self.box.x = actualX;
   self.box.y = actualY;
@@ -117,4 +145,9 @@ function Swimmer:draw()
     1, 1,
     SWIMMER_SIZE / 2, SWIMMER_SIZE / 2
   );
+
+  if DRAW_BOXES then
+    love.graphics.setColor(255, 255, 255);
+    love.graphics.rectangle("line", self.box.x, self.box.y, self.box.w, self.box.h);
+  end
 end
