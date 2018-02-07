@@ -17,7 +17,8 @@ Shark = Class {
 		BumpWorld:add(self, self.box.x, self.box.y, self.box.w, self.box.h);
 
 		self.state = "entering";
-		self.stateTimer = love.math.random(3, 5);
+		self.stateTimer = love.math.random(1, 3);
+		self.leaveTimer = love.math.random(10, 20);
 		self.type = "shark";
 		self.active = true;
 	end
@@ -30,6 +31,14 @@ function Shark:update(dt)
 
 	if self.stateTimer > 0 then
 		self.stateTimer = self.stateTimer - dt;
+	end
+
+	if self.leaveTimer > 0 then
+		self.leaveTimer = self.leaveTimer - dt;
+	end
+
+	if self.leaveTimer <= 0 then
+		self.state = "leaving";
 	end
 
 	if self.state == "entering" then
@@ -62,6 +71,10 @@ function Shark:updateEntering(dt)
 end
 
 function Shark:updateTreading(dt)
+	if self:canSenseBlood() then
+		self:huntBlood();
+	end
+
 	if self.stateTimer <= 0 then
 		self.target = {
 			x = love.math.random(0, SCREEN_WIDTH - SHARK_SIZE),
@@ -72,6 +85,10 @@ function Shark:updateTreading(dt)
 end
 
 function Shark:updateSwimming(dt)
+	if self:canSenseBlood() then
+		self:huntBlood();
+	end
+
 	local vx = self.target.x - self.box.x;
 	local vy = self.target.y - self.box.y;
 
@@ -87,15 +104,46 @@ function Shark:updateSwimming(dt)
 end
 
 function Shark:updateHunting(dt)
-	-- TODO
+	if self.huntTarget == nil or not self.huntTarget.active then
+		self.state = "treading";
+		self.stateTimer = love.math.random(3, 5);
+		return;
+	end
+
+	local vx = (self.huntTarget.box.x + self.huntTarget.box.w / 2) - (self.box.x + self.box.w / 2);
+	local vy = (self.huntTarget.box.y + self.huntTarget.box.h / 2) - (self.box.y + self.box.h / 2);
+
+	vx, vy = math.normalize(vx, vy);
+	self.velocity.x = vx * SHARK_SPEED;
+	self.velocity.y = vy * SHARK_SPEED;
 end
 
 function Shark:updateEating(dt)
-	-- TODO
+	self.velocity.x = 0;
+	self.velocity.y = 0;
+
+	if self.huntTarget == nil or not self.huntTarget.active then
+		self.state = "treading";
+		self.stateTimer = love.math.random(3, 5);
+	end
 end
 
 function Shark:updateLeaving(dt)
-	-- TODO
+	self.velocity.x = 0;
+	self.velocity.y = -SHARK_SPEED;
+
+	if self.box.y < 0 - self.box.h then
+		self.active = false;
+	end
+end
+
+function Shark:canSenseBlood()
+	return self.parentManager.parentStateGame.preyManager.numCorpses > 0;
+end
+
+function Shark:huntBlood()
+	self.huntTarget = self.parentManager.parentStateGame.preyManager:getClosestCorpse(self.box.x, self.box.y);
+	self.state = "hunting";
 end
 
 function Shark:updatePosition(dt)
@@ -103,9 +151,24 @@ function Shark:updatePosition(dt)
 	local dy = self.box.y + self.velocity.y * dt;
 
 	dx = math.clamp(dx, 0, SCREEN_WIDTH - self.box.w);
-	dy = math.clamp(dy, 0, SCREEN_HEIGHT - self.box.h);
+
+	if self.state == "leaving" then
+		dy = math.clamp(dy, -50, SCREEN_HEIGHT - self.box.h);
+	else
+		dy = math.clamp(dy, 0, SCREEN_HEIGHT - self.box.h);
+	end
 
 	local actualX, actualY, cols, len = BumpWorld:move(self, dx, dy, sharkCollision);
+
+	for i = 1, len do
+		local other = cols[i].other;
+
+		if other.type == "corpse" and self.state == "hunting" then
+			self.state = "eating";
+			self.huntTarget = other;
+			other:eat(dt);
+		end
+	end
 
 	self.box.x = actualX;
 	self.box.y = actualY;
@@ -120,6 +183,10 @@ function Shark:updateRotation(dt)
 end
 
 function Shark:draw()
+	if not self.active then
+		return;
+	end
+
 	love.graphics.setColor(0, 0, 0, 100);
 
 	local rotation = math.angle(0, 0, self.facing.y, self.facing.x);
@@ -134,16 +201,5 @@ function Shark:draw()
 	if DRAW_BOXES then
 		love.graphics.setColor(255, 255, 255);
 		love.graphics.rectangle("line", self.box.x, self.box.y, self.box.w, self.box.h);
-
-		if self.bitePressed then
-			love.graphics.setColor(255, 0, 0);
-		else
-			love.graphics.setColor(255, 255, 255);
-		end
-		love.graphics.rectangle("line",
-			self.box.x + self.facing.x * 45,
-			self.box.y + self.facing.y * 45,
-			32, 32
-		);
 	end
 end

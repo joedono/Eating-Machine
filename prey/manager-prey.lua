@@ -27,6 +27,7 @@ Manager_Prey = Class {
 		self.swimmerSpawnTimer = 0;
 
 		self.corpses = {};
+		self.numCorpses = 0;
 
 		self.active = true;
 	end
@@ -49,11 +50,12 @@ end
 function Manager_Prey:spawnSwimmer()
 	local x = love.math.random(0, SCREEN_WIDTH - SWIMMER_SIZE);
 	table.insert(self.swimmers, Swimmer(self, x, SCREEN_HEIGHT + SWIMMER_SIZE, self.swimmerImage, self.swimmerAnimation));
-	self.swimmerSpawnTimer = love.math.random(10, 15);
+	self.swimmerSpawnTimer = love.math.random(5, 10);
 end
 
 function Manager_Prey:spawnCorpse(x, y)
 	table.insert(self.corpses, Corpse(self, x, y, self.bloodEffect));
+	self.numCorpses = self.numCorpses + 1;
 end
 
 function Manager_Prey:updateSwimmers(dt)
@@ -78,9 +80,24 @@ function Manager_Prey:updateCorpses(dt)
 			table.insert(activeCorpses, corpse);
 		else
 			BumpWorld:remove(corpse);
+			self.numCorpses = self.numCorpses - 1;
 		end
 	end
 	self.corpses = activeCorpses;
+end
+
+function Manager_Prey:getClosestCorpse(x, y)
+	local closestCorpse = nil;
+	local dist = 0;
+
+	for index, corpse in pairs(self.corpses) do
+		if closestCorpse == nil or dist > math.dist(x, y, corpse.box.x, corpse.box.y) then
+			closestCorpse = corpse;
+			dist = math.dist(x, y, corpse.box.x, corpse.box.y);
+		end
+	end
+
+	return closestCorpse;
 end
 
 function Manager_Prey:draw()

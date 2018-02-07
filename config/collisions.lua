@@ -11,6 +11,10 @@ swimmerCollision = function(swimmer, other)
 end
 
 sharkCollision = function(shark, other)
+	if other.type == "corpse" then
+		return "cross";
+	end
+	
 	return nil;
 end
 

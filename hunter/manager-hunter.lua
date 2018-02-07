@@ -13,7 +13,7 @@ Manager_Hunter = Class {
 		self.sharks = {};
 		self.fishers = {};
 
-		self.sharkTimer = love.math.random(20, 40);
+		self.sharkTimer = love.math.random(10, 20);
 		self.fisherTimer = love.math.random(20, 40);
 	end
 }
@@ -69,7 +69,7 @@ end
 function Manager_Hunter:spawnShark()
 	local x = love.math.random(0, SCREEN_WIDTH - SWIMMER_SIZE);
 	table.insert(self.sharks, Shark(self, x, -SHARK_SIZE, self.sharkImage, self.sharkImageData, self.sharkAnimation));
-	self.sharkTimer = love.math.random(1, 1);
+	self.sharkTimer = love.math.random(10, 20);
 end
 
 function Manager_Hunter:spawnFisher()
