@@ -25,10 +25,10 @@ GAMEPAD_DEADZONE = 0.75;
 PLAYER_SWIM_SPEED = 200;
 PLAYER_SCALE = 1;
 PLAYER_INITIAL_DIMENSIONS = {
-  x = 100,
-  y = 100,
-  w = 40,
-  h = 40
+	x = 100,
+	y = 100,
+	w = 40,
+	h = 40
 };
 
 SWIMMER_SIZE = 32;

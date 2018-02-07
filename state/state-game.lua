@@ -34,33 +34,33 @@ function State_Game:resume()
 end
 
 function State_Game:focus(focused)
-  if focused then
-    self.active = true;
-  else
-    self.active = false;
-  end
+	if focused then
+		self.active = true;
+	else
+		self.active = false;
+	end
 end
 
 function State_Game:keypressed(key, unicode)
 	if not self.active then
-    return;
-  end
+		return;
+	end
 
 	if key == KEY_LEFT then
-    self.player.leftPressed = true;
-  end
+		self.player.leftPressed = true;
+	end
 
-  if key == KEY_RIGHT then
-    self.player.rightPressed = true;
-  end
+	if key == KEY_RIGHT then
+		self.player.rightPressed = true;
+	end
 
-  if key == KEY_UP then
-    self.player.upPressed = true;
-  end
+	if key == KEY_UP then
+		self.player.upPressed = true;
+	end
 
-  if key == KEY_DOWN then
-    self.player.downPressed = true;
-  end
+	if key == KEY_DOWN then
+		self.player.downPressed = true;
+	end
 
 	if key == KEY_BITE then
 		self.player.bitePressed = true;
@@ -73,24 +73,24 @@ end
 
 function State_Game:keyreleased(key, unicode)
 	if not self.active then
-    return;
-  end
+		return;
+	end
 
 	if key == KEY_LEFT then
-    self.player.leftPressed = false;
-  end
+		self.player.leftPressed = false;
+	end
 
-  if key == KEY_RIGHT then
-    self.player.rightPressed = false;
-  end
+	if key == KEY_RIGHT then
+		self.player.rightPressed = false;
+	end
 
-  if key == KEY_UP then
-    self.player.upPressed = false;
-  end
+	if key == KEY_UP then
+		self.player.upPressed = false;
+	end
 
-  if key == KEY_DOWN then
-    self.player.downPressed = false;
-  end
+	if key == KEY_DOWN then
+		self.player.downPressed = false;
+	end
 
 	if key == KEY_BITE then
 		self.player.bitePressed = false;
@@ -98,25 +98,25 @@ function State_Game:keyreleased(key, unicode)
 end
 
 function State_Game:gamepadpressed(joystick, button)
-  if not self.active then
-    return;
-  end
+	if not self.active then
+		return;
+	end
 
 	if button == GAMEPAD_LEFT then
-    self.player.leftPressed = true;
-  end
+		self.player.leftPressed = true;
+	end
 
-  if button == GAMEPAD_RIGHT then
-    self.player.rightPressed = true;
-  end
+	if button == GAMEPAD_RIGHT then
+		self.player.rightPressed = true;
+	end
 
-  if button == GAMEPAD_UP then
-    self.player.upPressed = true;
-  end
+	if button == GAMEPAD_UP then
+		self.player.upPressed = true;
+	end
 
-  if button == GAMEPAD_DOWN then
-    self.player.downPressed = true;
-  end
+	if button == GAMEPAD_DOWN then
+		self.player.downPressed = true;
+	end
 
 	if button == GAMEPAD_BITE then
 		self.player.bitePressed = true;
@@ -124,29 +124,29 @@ function State_Game:gamepadpressed(joystick, button)
 
 	if button == GAMEPAD_START then
 		GameState.push(State_Pause);
-  end
+	end
 end
 
 function State_Game:gamepadreleased(joystick, button)
-  if not self.active then
-    return;
-  end
+	if not self.active then
+		return;
+	end
 
 	if button == GAMEPAD_LEFT then
-    self.player.leftPressed = false;
-  end
+		self.player.leftPressed = false;
+	end
 
-  if button == GAMEPAD_RIGHT then
-    self.player.rightPressed = false;
-  end
+	if button == GAMEPAD_RIGHT then
+		self.player.rightPressed = false;
+	end
 
-  if button == GAMEPAD_UP then
-    self.player.upPressed = false;
-  end
+	if button == GAMEPAD_UP then
+		self.player.upPressed = false;
+	end
 
-  if button == GAMEPAD_DOWN then
-    self.player.downPressed = false;
-  end
+	if button == GAMEPAD_DOWN then
+		self.player.downPressed = false;
+	end
 
 	if button == GAMEPAD_BITE then
 		self.player.bitePressed = false;
@@ -155,8 +155,8 @@ end
 
 function State_Game:gamepadaxis(joystick, axis, value)
 	if not self.active then
-    return;
-  end
+		return;
+	end
 
 	if axis == "leftx" then -- X Movement
 		self.player.gamepadVelocity.x = value;
@@ -169,8 +169,8 @@ end
 
 function State_Game:update(dt)
 	if not self.active then
-    return;
-  end
+		return;
+	end
 
 	self.oceanWaveTimer:update(dt);
 	self.player:update(dt);
@@ -213,9 +213,9 @@ end
 function State_Game:draw()
 	CANVAS:renderTo(function()
 		love.graphics.clear();
-    love.graphics.setColor(255, 255, 255);
+		love.graphics.setColor(255, 255, 255);
 		love.graphics.draw(self.beachImage, 0, 0);
-    love.graphics.draw(self.oceanImage, 0, self.oceanWavePosition);
+		love.graphics.draw(self.oceanImage, 0, self.oceanWavePosition);
 
 		self.player:draw();
 		self.preyManager:draw();
@@ -233,8 +233,8 @@ function State_Game:draw()
 		love.graphics.setColor(255, 255, 255);
 		love.graphics.rectangle("line", 80, 5, 100, 18);
 		love.graphics.rectangle("line", 80, 30, 100, 18);
-  end);
+	end);
 
-  love.graphics.setColor(255, 255, 255);
-  love.graphics.draw(CANVAS, CANVAS_OFFSET_X, CANVAS_OFFSET_Y, 0, CANVAS_SCALE, CANVAS_SCALE);
+	love.graphics.setColor(255, 255, 255);
+	love.graphics.draw(CANVAS, CANVAS_OFFSET_X, CANVAS_OFFSET_Y, 0, CANVAS_SCALE, CANVAS_SCALE);
 end
