@@ -17,7 +17,7 @@ function State_Title:init()
 	};
 
 	local bloodImage = love.graphics.newImage("asset/image/effect/corpse-blood.png");
-	local bloodEffect = love.graphics.newParticleSystem(bloodImage, 600);
+	local bloodEffect = love.graphics.newParticleSystem(bloodImage, 800);
 	bloodEffect:setColors(
 		150, 0, 0, 100,
 		200, 0, 0, 150,
@@ -30,8 +30,8 @@ function State_Title:init()
 	bloodEffect:setSizes(0.5, 2);
 
 	self.titleEffect = bloodEffect:clone();
-	self.titleEffect:setPosition(295, 195);
-	self.titleEffect:setAreaSpread("uniform", 200, 20);
+	self.titleEffect:setPosition(300, 185);
+	self.titleEffect:setAreaSpread("uniform", 200, 40);
 	self.titleEffect:setEmissionRate(200);
 
 	self.subTitleEffect = bloodEffect:clone();
@@ -49,6 +49,11 @@ function State_Title:enter()
 	self.sharkMovementTimer = Timer.new();
 	self.sharkRepeatTimer = Timer.new();
 	self.sharkRepeatTimer:every(10, function() self:startSharkMovement(); end);
+
+	for i = 1, 60 do
+		self.titleEffect:update(1);
+		self.subTitleEffect:update(1);
+	end
 end
 
 function State_Title:keypressed(key, unicode)
