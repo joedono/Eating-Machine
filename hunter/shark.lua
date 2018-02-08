@@ -61,6 +61,10 @@ function Shark:update(dt)
 end
 
 function Shark:updateEntering(dt)
+	if self:canSenseBlood() then
+		self:huntBlood();
+	end
+	
 	self.velocity.y = SHARK_SPEED;
 
 	if self.stateTimer <= 0 then
