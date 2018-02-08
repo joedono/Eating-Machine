@@ -14,7 +14,11 @@ sharkCollision = function(shark, other)
 	if other.type == "corpse" then
 		return "cross";
 	end
-	
+
+	return nil;
+end
+
+hunterCollision = function(hunter, other)
 	return nil;
 end
 

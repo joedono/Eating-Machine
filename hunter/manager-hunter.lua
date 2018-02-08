@@ -1,4 +1,4 @@
-require "hunter/fisher";
+require "hunter/hunter";
 require "hunter/shark";
 
 Manager_Hunter = Class {
@@ -10,17 +10,26 @@ Manager_Hunter = Class {
 		local grid = Anim8.newGrid(80, 80, self.sharkImage:getWidth(), self.sharkImage:getHeight());
 		self.sharkAnimation = Anim8.newAnimation(grid("1-2", 1), 0.3);
 
+		self.huntingBoatImage = love.graphics.newImage("asset/image/hunter/ship_small_body.png");
+		self.huntingGunImage = love.graphics.newImage("asset/image/hunter/ship_big_gun.png");
+		self.huntingGunFireImage = love.graphics.newImage("asset/image/hunter/gun_fire.png");
+		self.waterRippleImage = love.graphics.newImage("asset/image/hunter/water_ripple.png");
+		local grid = Anim8.newGrid(168, 64, self.waterRippleImage:getWidth(), self.waterRippleImage:getHeight());
+		self.waterRippleAnimation = Anim8.newAnimation(grid(1, "1-4"), 0.3);
+
 		self.sharks = {};
-		self.fishers = {};
+		self.hunters = {};
 
 		self.sharkTimer = love.math.random(10, 20);
-		self.fisherTimer = love.math.random(20, 40);
+		self.hunterTimer = love.math.random(20, 40);
+
+		self:spawnHunter();
 	end
 }
 
 function Manager_Hunter:update(dt, attention)
 	self:updateSharks(dt);
-	self:updateFishers(dt);
+	self:updateHunters(dt);
 
 	self.sharkTimer = self.sharkTimer - dt;
 	if self.sharkTimer <= 0 then
@@ -28,10 +37,9 @@ function Manager_Hunter:update(dt, attention)
 	end
 
 	if attention >= 100 then
-		self.fisherTimer = self.fisherTimer - dt;
-		if self.fisherTimer <= 0 then
-			self:spawnFisher();
-			self.fishertimer = love.math.random(20, 40);
+		self.hunterTimer = self.hunterTimer - dt;
+		if self.hunterTimer <= 0 then
+			self:spawnHunter();
 		end
 	end
 end
@@ -51,29 +59,48 @@ function Manager_Hunter:updateSharks(dt)
 	self.sharks = activeSharks;
 end
 
-function Manager_Hunter:updateFishers(dt)
-	local activeFishers = {};
+function Manager_Hunter:updateHunters(dt)
+	local activeHunters = {};
 
-	for index, fisher in pairs(self.fishers) do
-		fisher:update(dt);
-		if fisher.active then
-			table.insert(activeFishers, fisher);
+	for index, hunter in pairs(self.hunters) do
+		hunter:update(dt);
+		if hunter.active then
+			table.insert(activeHunters, hunter);
 		else
-			BumpWorld:remove(fisher);
+			BumpWorld:remove(hunter);
 		end
 	end
 
-	self.fishers = activeFishers;
+	self.hunters = activeHunters;
 end
 
 function Manager_Hunter:spawnShark()
-	local x = love.math.random(0, SCREEN_WIDTH - SWIMMER_SIZE);
+	local x = love.math.random(0, SCREEN_WIDTH - SHARK_SIZE);
 	table.insert(self.sharks, Shark(self, x, -SHARK_SIZE, self.sharkImage, self.sharkImageData, self.sharkAnimation));
 	self.sharkTimer = love.math.random(10, 20);
 end
 
-function Manager_Hunter:spawnFisher()
-	-- TODO
+function Manager_Hunter:spawnHunter()
+	local x = -100;
+	local y = love.math.random(100, SCREEN_HEIGHT / 2);
+	local velocity = {
+		x = 1,
+		y = 0
+	};
+
+	if love.math.random() < 0.5 then
+		x = SCREEN_WIDTH + 100;
+		velocity.x = -1;
+	end
+
+	table.insert(self.hunters, Hunter(self, x, y, velocity,
+		self.huntingBoatImage,
+		self.huntingGunImage,
+		self.waterRippleImage,
+		self.waterRippleAnimation,
+		self.huntingGunFireImage
+	));
+	self.hunterTimer = love.math.random(20, 40);
 end
 
 function Manager_Hunter:draw()
@@ -81,7 +108,7 @@ function Manager_Hunter:draw()
 		shark:draw();
 	end
 
-	for index, fisher in pairs(self.fishers) do
-		fisher:draw();
+	for index, hunter in pairs(self.hunters) do
+		hunter:draw();
 	end
 end
