@@ -22,8 +22,8 @@ Manager_Hunter = Class {
 		self.sharks = {};
 		self.hunters = {};
 
-		self.sharkTimer = love.math.random(10, 20);
-		self.hunterTimer = love.math.random(20, 40);
+		self.sharkTimer = love.math.random(SHARK_SPAWN_MIN, SHARK_SPAWN_MAX);
+		self.hunterTimer = love.math.random(HUNTER_SPAWN_MIN, HUNTER_SPAWN_MAX);
 	end
 }
 
@@ -77,7 +77,7 @@ end
 function Manager_Hunter:spawnShark()
 	local x = love.math.random(0, SCREEN_WIDTH - SHARK_SIZE);
 	table.insert(self.sharks, Shark(self, x, -SHARK_SIZE, self.sharkImage, self.sharkImageData, self.sharkAnimation));
-	self.sharkTimer = love.math.random(10, 20);
+	self.sharkTimer = love.math.random(SHARK_SPAWN_MIN, SHARK_SPAWN_MAX);
 end
 
 function Manager_Hunter:spawnHunter()
@@ -101,7 +101,8 @@ function Manager_Hunter:spawnHunter()
 		self.huntingGunFireImage,
 		self.gunshotSound
 	));
-	self.hunterTimer = love.math.random(20, 40);
+
+	self.hunterTimer = love.math.random(HUNTER_SPAWN_MIN, HUNTER_SPAWN_MAX);
 end
 
 function Manager_Hunter:huntersLeave()

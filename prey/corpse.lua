@@ -13,7 +13,7 @@ Corpse = Class {
 
 		BumpWorld:add(self, self.box.x, self.box.y, self.box.w, self.box.h);
 
-		self.aliveTimer = 10;
+		self.aliveTimer = CORPSE_TIMER;
 		self.type = "corpse";
 		self.active = true;
 	end

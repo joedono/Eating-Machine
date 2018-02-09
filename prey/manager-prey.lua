@@ -24,7 +24,7 @@ Manager_Prey = Class {
 		self.bloodEffect:setSizes(0.5, 2);
 
 		self.swimmers = {};
-		self.swimmerSpawnTimer = love.math.random(5, 10);
+		self.swimmerSpawnTimer = love.math.random(SWIMMER_SPAWN_MIN, SWIMMER_SPAWN_MAX);
 
 		self.corpses = {};
 		self.numCorpses = 0;
@@ -50,7 +50,7 @@ end
 function Manager_Prey:spawnSwimmer()
 	local x = love.math.random(0, SCREEN_WIDTH - SWIMMER_SIZE);
 	table.insert(self.swimmers, Swimmer(self, x, SCREEN_HEIGHT + SWIMMER_SIZE, self.swimmerImage, self.swimmerAnimation));
-	self.swimmerSpawnTimer = love.math.random(5, 10);
+	self.swimmerSpawnTimer = love.math.random(SWIMMER_SPAWN_MIN, SWIMMER_SPAWN_MAX);
 end
 
 function Manager_Prey:spawnCorpse(x, y)
