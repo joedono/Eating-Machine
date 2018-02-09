@@ -40,6 +40,7 @@ function Corpse:eat(dt)
 end
 
 function Corpse:draw()
+	love.graphics.setColor(255, 255, 255);
 	love.graphics.draw(self.bloodEffect, self.box.x + self.box.w / 2, self.box.y + self.box.h / 2);
 
 	if DRAW_BOXES then
