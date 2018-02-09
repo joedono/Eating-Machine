@@ -212,7 +212,9 @@ function State_Game:killedShark()
 end
 
 function State_Game:loseGame()
-	print("lost game");
+	if KILL_PLAYER then
+		GameState.push(State_Losing);
+	end
 end
 
 function State_Game:draw()

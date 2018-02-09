@@ -3,6 +3,7 @@ SCREEN_HEIGHT = 600;
 FULLSCREEN = false;
 
 DRAW_BOXES = false;
+KILL_PLAYER = true;
 
 KEY_LEFT = "left";
 KEY_RIGHT = "right";

@@ -12,6 +12,8 @@ require "config/collisions";
 require "config/constants";
 
 require "state/state-game";
+require "state/state-losing";
+require "state/state-lost";
 require "state/state-pause";
 require "state/state-splash-hive";
 require "state/state-splash-love";
