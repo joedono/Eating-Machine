@@ -24,8 +24,6 @@ Manager_Hunter = Class {
 
 		self.sharkTimer = love.math.random(10, 20);
 		self.hunterTimer = love.math.random(20, 40);
-
-		self:spawnHunter();
 	end
 }
 

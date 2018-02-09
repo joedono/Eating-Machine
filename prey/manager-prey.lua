@@ -24,7 +24,7 @@ Manager_Prey = Class {
 		self.bloodEffect:setSizes(0.5, 2);
 
 		self.swimmers = {};
-		self.swimmerSpawnTimer = 0;
+		self.swimmerSpawnTimer = love.math.random(5, 10);
 
 		self.corpses = {};
 		self.numCorpses = 0;
