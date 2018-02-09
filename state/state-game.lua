@@ -206,8 +206,13 @@ function State_Game:eatCorpse(dt)
 	self.hunger = math.clamp(self.hunger, 0, 100);
 end
 
+function State_Game:killedShark()
+	self.attention = 0;
+	self.hunterManager:huntersLeave();
+end
+
 function State_Game:loseGame()
-	-- TODO
+	print("lost game");
 end
 
 function State_Game:draw()

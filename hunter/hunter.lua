@@ -1,5 +1,5 @@
 Hunter = Class {
-	init = function (self, parentManager, x, y, velocity, boatImage, gunImage, waterRippleImage, waterRippleAnimation, gunFireImage)
+	init = function (self, parentManager, x, y, velocity, boatImage, gunImage, waterRippleImage, waterRippleAnimation, gunFireImage, gunshotSound)
 		self.parentManager = parentManager;
 
 		self.box = {
@@ -30,6 +30,8 @@ Hunter = Class {
 		self.gunFireImage = gunFireImage;
 		self.waterRippleImage = waterRippleImage;
 		self.waterRippleAnimation = waterRippleAnimation:clone();
+		self.gunshotSound = gunshotSound;
+		self.shootTimer = 0;
 
 		self.state = "entering";
 		self.stateTimer = love.math.random(1, 3);
@@ -45,6 +47,10 @@ function Hunter:update(dt)
 
 	if self.stateTimer > 0 then
 		self.stateTimer = self.stateTimer - dt;
+	end
+
+	if self.shootTimer > 0 then
+		self.shootTimer = self.shootTimer - dt;
 	end
 
 	if self.state == "entering" then
@@ -112,11 +118,59 @@ function Hunter:updatePatrolling(dt)
 end
 
 function Hunter:updatePursuing(dt)
-	-- TODO
+	local vx = (self.closestCorpse.box.x + self.closestCorpse.box.w / 2) - (self.box.x + self.box.w / 2);
+	local vy = (self.closestCorpse.box.y + self.closestCorpse.box.h / 2) - (self.box.y + self.box.h / 2);
+
+	if math.abs(vx) < 100 and math.abs(vy) < 100 then
+		self.velocity = { x = 0, y = 0 };
+		self.shootTarget = nil;
+		self.state = "shooting";
+		self.stateTimer = love.math.random(3, 5);
+	else
+		vx, vy = math.normalize(vx, vy);
+		self.velocity.x = vx * HUNTER_SPEED;
+		self.velocity.y = vy * HUNTER_SPEED;
+	end
 end
 
 function Hunter:updateShooting(dt)
-	-- TODO
+	if self.stateTimer <= 0 then
+		self.target = {
+			x = love.math.random(0, SCREEN_WIDTH - HUNTER_SIZE),
+			y = love.math.random(0, SCREEN_HEIGHT - BEACH_TOP - HUNTER_SIZE)
+		};
+		self.state = "patrolling";
+	end
+
+	if self.shootTarget == nil then
+		local targets, len = BumpWorld:queryRect(
+			self.box.x + self.box.w / 2 + self.facing.x * 80 - 90 / 2,
+			self.box.y + self.box.h / 2 + self.facing.y * 80 - 90 / 2,
+			90, 90,
+			hunterTargetFilter
+		);
+
+		if len > 0 then
+			self.shootTarget = targets[1];
+			self.gunshotSound:rewind();
+			self.gunshotSound:play();
+
+			self.aiming.x = self.shootTarget.box.x - self.box.x;
+			self.aiming.y = self.shootTarget.box.y - self.box.y;
+
+			self.aiming.x, self.aiming.y = math.normalize(self.aiming.x, self.aiming.y);
+
+			self.shootTimer = 0.3;
+		end
+	else
+		if self.shootTarget.type == "shark" then
+			self.shootTarget.state = "dead";
+			self.shootTarget = nil;
+			self.parentManager.parentStateGame:killedShark();
+		elseif self.shootTarget.type == "player" then
+			self.parentManager.parentStateGame:loseGame();
+		end
+	end
 end
 
 function Hunter:updateLeaving(dt)
@@ -133,9 +187,9 @@ function Hunter:canSeeBlood()
 end
 
 function Hunter:huntShark()
-	local closestCorpse = self.parentManager.parentStateGame.preyManager:getClosestCorpse(self.box.x, self.box.y);
-	
-	-- TODO
+	self.closestCorpse = self.parentManager.parentStateGame.preyManager:getClosestCorpse(self.box.x, self.box.y);
+	self.state = "pursuing";
+	self.velocity = { x = 0, y = 0 };
 end
 
 function Hunter:updatePosition(dt)
@@ -162,7 +216,7 @@ function Hunter:updateRotation(dt)
 		self.facing.x = fx;
 		self.facing.y = fy;
 
-		if self.state ~= "pursuing" and self.state ~= "shooting" then
+		if self.state ~= "shooting" then
 			self.aiming.x = fx;
 			self.aiming.y = fy;
 		end
@@ -206,7 +260,31 @@ function Hunter:draw()
 		60 / 2, 32 / 2
 	);
 
+	if self.shootTimer > 0 then
+		local gunOffsetX = self.aiming.x * 50 + self.box.x + self.box.w / 2;
+		local gunOffsetY = self.aiming.y * 50 + self.box.y + self.box.h / 2;
+		love.graphics.draw(
+			self.gunFireImage,
+			gunOffsetX, gunOffsetY,
+			aimingAngle,
+			0.7, 0.7,
+			75 / 2, 30 / 2
+		);
+	end
+
 	if DRAW_BOXES then
 		love.graphics.rectangle("line", self.box.x, self.box.y, self.box.w, self.box.h);
+
+		if self.state == "shooting" then
+			love.graphics.setColor(255, 0, 0);
+		else
+			love.graphics.setColor(255, 255, 255);
+		end
+
+		love.graphics.rectangle("line",
+			self.box.x + self.box.w / 2 + self.facing.x * 80 - 90 / 2,
+			self.box.y + self.box.h / 2 + self.facing.y * 80 - 90 / 2,
+			90, 90
+		);
 	end
 end

@@ -33,3 +33,15 @@ victimFilter = function(other)
 
 	return false;
 end
+
+hunterTargetFilter = function(other)
+	if other.type == "shark" and other.active then
+		return true;
+	end
+
+	if other.type == "player" then
+		return true;
+	end
+
+	return false;
+end

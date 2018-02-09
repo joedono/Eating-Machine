@@ -53,6 +53,8 @@ function Shark:update(dt)
 		self:updateEating(dt);
 	elseif self.state == "leaving" then
 		self:updateLeaving(dt);
+	elseif self.state == "dead" then
+		self.active = false;
 	end
 
 	self.animation:update(dt);
@@ -64,7 +66,7 @@ function Shark:updateEntering(dt)
 	if self:canSenseBlood() then
 		self:huntBlood();
 	end
-	
+
 	self.velocity.y = SHARK_SPEED;
 
 	if self.stateTimer <= 0 then

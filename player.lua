@@ -22,8 +22,8 @@ Player = Class {
 
 		self:resetKeys();
 
-		self.active = true;
 		self.type = "player";
+		self.active = true;
 	end
 }
 

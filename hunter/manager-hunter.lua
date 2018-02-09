@@ -17,6 +17,8 @@ Manager_Hunter = Class {
 		local grid = Anim8.newGrid(168, 64, self.waterRippleImage:getWidth(), self.waterRippleImage:getHeight());
 		self.waterRippleAnimation = Anim8.newAnimation(grid(1, "1-4"), 0.3);
 
+		self.gunshotSound = love.audio.newSource("asset/sound/gunshot.wav", "static");
+
 		self.sharks = {};
 		self.hunters = {};
 
@@ -98,9 +100,16 @@ function Manager_Hunter:spawnHunter()
 		self.huntingGunImage,
 		self.waterRippleImage,
 		self.waterRippleAnimation,
-		self.huntingGunFireImage
+		self.huntingGunFireImage,
+		self.gunshotSound
 	));
 	self.hunterTimer = love.math.random(20, 40);
+end
+
+function Manager_Hunter:huntersLeave()
+	for index, hunter in pairs(self.hunters) do
+		hunter.state = "leaving";
+	end
 end
 
 function Manager_Hunter:draw()
