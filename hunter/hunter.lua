@@ -177,7 +177,7 @@ function Hunter:updateLeaving(dt)
 	self.velocity.x = 0;
 	self.velocity.y = -HUNTER_SPEED;
 
-	if self.box.y < 0 - self.box.h then
+	if self.box.y < -200 then
 		self.active = false;
 	end
 end
