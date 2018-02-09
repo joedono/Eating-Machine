@@ -121,6 +121,10 @@ function Hunter:updatePursuing(dt)
 	local vx = (self.closestCorpse.box.x + self.closestCorpse.box.w / 2) - (self.box.x + self.box.w / 2);
 	local vy = (self.closestCorpse.box.y + self.closestCorpse.box.h / 2) - (self.box.y + self.box.h / 2);
 
+	local fx, fy = math.normalize(vx, vy);
+	self.facing.x = fx;
+	self.facing.y = fy;
+
 	if math.abs(vx) < 100 and math.abs(vy) < 100 then
 		self.velocity = { x = 0, y = 0 };
 		self.shootTarget = nil;
