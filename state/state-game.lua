@@ -32,7 +32,9 @@ function State_Game:enter()
 	self.oceanWavePosition = 0;
 	self.oceanWaveDirection = -1;
 	self.oceanWaveTimer = Timer.new();
-	self.oceanWaveTimer:every(0.75, function() self:moveOceanWaves(); end);
+	self.oceanWaveTimer:every(0.75, function()
+		self:moveOceanWaves();
+	end);
 
 	self.hunger = 100;
 	self.attention = 0;
@@ -40,10 +42,7 @@ end
 
 function State_Game:resume()
 	self.player:resetKeys();
-end
-
-function State_Game:leave()
-	self.oceanSound:stop();
+	self.oceanSound:play();
 end
 
 function State_Game:focus(focused)
@@ -80,6 +79,7 @@ function State_Game:keypressed(key, unicode)
 	end
 
 	if key == KEY_START then
+		self.oceanSound:pause();
 		GameState.push(State_Pause);
 	end
 end
@@ -136,6 +136,7 @@ function State_Game:gamepadpressed(joystick, button)
 	end
 
 	if button == GAMEPAD_START then
+		self.oceanSound:pause();
 		GameState.push(State_Pause);
 	end
 end
@@ -229,6 +230,7 @@ end
 
 function State_Game:loseGame()
 	if KILL_PLAYER then
+		self.oceanSound:stop();
 		GameState.push(State_Losing);
 	end
 end

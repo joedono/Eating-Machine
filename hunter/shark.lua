@@ -110,8 +110,9 @@ function Shark:updateSwimming(dt)
 end
 
 function Shark:updateHunting(dt)
-	if self.huntTarget == nil or not self.huntTarget.active then
+	if self.huntTarget == nil or not self.huntTarget.active or self.huntTarget.aliveTimer <= 0 then
 		self.state = "treading";
+		self.velocity = { x = 0, y = 0 };
 		self.stateTimer = love.math.random(3, 5);
 		return;
 	end

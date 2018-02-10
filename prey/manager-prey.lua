@@ -91,7 +91,7 @@ function Manager_Prey:getClosestCorpse(x, y)
 	local dist = 0;
 
 	for index, corpse in pairs(self.corpses) do
-		if closestCorpse == nil or dist > math.dist(x, y, corpse.box.x, corpse.box.y) then
+		if (closestCorpse == nil or dist > math.dist(x, y, corpse.box.x, corpse.box.y)) and corpse.active and corpse.aliveTimer > 0 then
 			closestCorpse = corpse;
 			dist = math.dist(x, y, corpse.box.x, corpse.box.y);
 		end
