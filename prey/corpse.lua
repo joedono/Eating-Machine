@@ -24,12 +24,17 @@ function Corpse:update(dt)
 		return;
 	end
 
+	self.bloodEffect:update(dt);
+
 	if self.aliveTimer < 0 then
-		self.active = false;
-		self.bloodEffect:stop();
+		self.bloodEffect:setEmissionRate(0);
+
+		if self.bloodEffect:getCount() == 0 then
+			self.bloodEffect:stop();
+			self.active = false;
+		end
 	else
 		self.aliveTimer = self.aliveTimer - dt;
-		self.bloodEffect:update(dt);
 	end
 end
 

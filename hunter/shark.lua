@@ -169,7 +169,7 @@ function Shark:updatePosition(dt)
 	for i = 1, len do
 		local other = cols[i].other;
 
-		if other.type == "corpse" and self.state == "hunting" then
+		if other.type == "corpse" and self.state == "hunting" and other.aliveTimer > 0 then
 			self.state = "eating";
 			self.huntTarget = other;
 			other:eat(dt);

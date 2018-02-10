@@ -123,7 +123,7 @@ function Player:bite(dt)
 		if victim.type == "swimmer" then
 			self.parentStateGame:spawnCorpse(victim.box.x + victim.box.w / 2, victim.box.y + victim.box.h / 2);
 			victim.active = false;
-		elseif victim.type == "corpse" then
+		elseif victim.type == "corpse" and victim.aliveTimer > 0 then
 			victim:eat(dt)
 			self.parentStateGame:eatCorpse(dt);
 		end
