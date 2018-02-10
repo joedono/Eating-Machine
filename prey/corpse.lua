@@ -35,7 +35,7 @@ end
 
 function Corpse:eat(dt)
 	if self.aliveTimer > 0 then
-		self.aliveTimer = self.aliveTimer - dt;
+		self.aliveTimer = self.aliveTimer - dt * CORPSE_EAT_RATE;
 	end
 end
 
