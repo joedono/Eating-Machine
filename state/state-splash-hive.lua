@@ -7,7 +7,7 @@ function State_Splash_Hive:init()
 
 	self.imagePos = {
 		x = SCREEN_WIDTH / 2 - self.hiveImage:getWidth() / 2 * self.imageScale,
-		y = SCREEN_HEIGHT / 2 - self.hiveImage:getHeight() / 2 * self.imageScale - 60
+		y = SCREEN_HEIGHT / 2 - self.hiveImage:getHeight() / 2 * self.imageScale - 50
 	};
 
 	local eyePos = self.imagePos.x + 285 * self.imageScale;
