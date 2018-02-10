@@ -11,6 +11,10 @@ function State_Game:init()
 	self.oceanImage = love.graphics.newImage("asset/image/ocean.png");
 	self.beachImage = love.graphics.newImage("asset/image/beach.png");
 
+	self.sharkEatSound = love.audio.newSource("asset/sound/shark-bite.wav", "static");
+	self.sharkEatSound:setLooping(true);
+	self.sharkEatSound:setVolume(0.3);
+
 	self.hudFont = love.graphics.newFont(14);
 	self.active = true;
 end
@@ -172,10 +176,12 @@ function State_Game:update(dt)
 		return;
 	end
 
+	self.sharkEatSound:pause();
+
 	self.oceanWaveTimer:update(dt);
-	self.player:update(dt);
 	self.preyManager:update(dt);
 	self.hunterManager:update(dt, self.attention);
+	self.player:update(dt);
 
 	self.hunger = self.hunger - dt * HUNGER_RATE;
 	if self.hunger <= 0 then
@@ -204,6 +210,7 @@ end
 function State_Game:eatCorpse(dt)
 	self.hunger = self.hunger + dt * EAT_RATE;
 	self.hunger = math.clamp(self.hunger, 0, 100);
+	self.sharkEatSound:play();
 end
 
 function State_Game:killedShark()
