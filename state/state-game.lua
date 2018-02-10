@@ -24,8 +24,6 @@ function State_Game:init()
 
 	self.hudFont = love.graphics.newFont(14);
 	self.active = true;
-
-	self.oceanSound:play();
 end
 
 function State_Game:enter()
@@ -46,6 +44,7 @@ function State_Game:enter()
 		self:resetBirds();
 	end);
 
+	self.oceanSound:play();
 	self:resetBirds();
 	self.hunger = 100;
 	self.attention = 0;
@@ -263,6 +262,7 @@ end
 
 function State_Game:loseGame()
 	if KILL_PLAYER then
+		self.sharkEatSound:stop();
 		self.oceanSound:stop();
 		GameState.push(State_Losing);
 	end
