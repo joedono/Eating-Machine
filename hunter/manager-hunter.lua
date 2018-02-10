@@ -110,6 +110,7 @@ end
 function Manager_Hunter:huntersLeave()
 	for index, hunter in pairs(self.hunters) do
 		hunter.state = "leaving";
+		hunter.stateTimer = 2;
 	end
 end
 

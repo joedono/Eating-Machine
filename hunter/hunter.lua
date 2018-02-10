@@ -118,6 +118,11 @@ function Hunter:updatePatrolling(dt)
 end
 
 function Hunter:updatePursuing(dt)
+	if not self.closestCorpse.active then
+		self.state = "treading";
+		return;
+	end
+
 	local vx = (self.closestCorpse.box.x + self.closestCorpse.box.w / 2) - (self.box.x + self.box.w / 2);
 	local vy = (self.closestCorpse.box.y + self.closestCorpse.box.h / 2) - (self.box.y + self.box.h / 2);
 
@@ -178,11 +183,13 @@ function Hunter:updateShooting(dt)
 end
 
 function Hunter:updateLeaving(dt)
-	self.velocity.x = 0;
-	self.velocity.y = -HUNTER_SPEED;
+	if self.stateTimer <= 0 then
+		self.velocity.x = 0;
+		self.velocity.y = -HUNTER_SPEED;
 
-	if self.box.y < -200 then
-		self.active = false;
+		if self.box.y < -200 then
+			self.active = false;
+		end
 	end
 end
 
