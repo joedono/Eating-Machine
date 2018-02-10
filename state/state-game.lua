@@ -18,6 +18,11 @@ function State_Game:init()
 	self.sharkEatSound:setLooping(true);
 	self.sharkEatSound:setVolume(0.3);
 
+	self.birdImage = love.graphics.newImage("asset/image/bird.png");
+	local birdGrid = Anim8.newGrid(16, 16, self.birdImage:getWidth(), self.birdImage:getHeight());
+	self.birdAnimation = Anim8.newAnimation(birdGrid("1-2", 1), 0.3);
+	self.birdPosition = { x = -100, y = -100 };
+
 	self.hudFont = love.graphics.newFont(14);
 	self.active = true;
 
@@ -36,6 +41,13 @@ function State_Game:enter()
 		self:moveOceanWaves();
 	end);
 
+	self.birdRepeatTimer = Timer.new();
+	self.birdMovementTimer = Timer.new();
+	self.birdRepeatTimer:every(15, function()
+		self:resetBirds();
+	end);
+
+	self:resetBirds();
 	self.hunger = 100;
 	self.attention = 0;
 end
@@ -189,6 +201,10 @@ function State_Game:update(dt)
 	self.sharkEatSound:pause();
 
 	self.oceanWaveTimer:update(dt);
+	self.birdRepeatTimer:update(dt);
+	self.birdMovementTimer:update(dt);
+	self.birdAnimation:update(dt);
+
 	self.preyManager:update(dt);
 	self.hunterManager:update(dt, self.attention);
 	self.player:update(dt);
@@ -206,6 +222,24 @@ function State_Game:moveOceanWaves()
 	elseif self.oceanWavePosition == -OCEAN_MOVE_RATE * 3 then
 		self.oceanWaveDirection = 1;
 	end
+end
+
+function State_Game:resetBirds()
+	local randomAngle = love.math.random() * math.pi * 2;
+	local oppositeAngle = randomAngle - math.pi;
+	oppositeAngle = oppositeAngle - math.pi * 1/8;
+	oppositeAngle = oppositeAngle + love.math.random() * math.pi * 1/4;
+
+	self.birdPosition.x, self.birdPosition.y = VectorLite.fromPolar(randomAngle, 400);
+	local bx, by = VectorLite.fromPolar(oppositeAngle, 400);
+
+	self.birdPosition.x = self.birdPosition.x + SCREEN_WIDTH / 2;
+	self.birdPosition.y = self.birdPosition.y + SCREEN_HEIGHT / 2;
+	bx = bx + SCREEN_WIDTH / 2;
+	by = by + SCREEN_HEIGHT / 2;
+
+	self.birdMovementTimer:clear();
+	self.birdMovementTimer:tween(7, self.birdPosition, { x = bx, y = by }, "in-out-linear");
 end
 
 function State_Game:spawnCorpse(x, y)
@@ -250,6 +284,10 @@ function State_Game:draw()
 		love.graphics.setColor(255, 255, 255);
 		love.graphics.print("Hunger", 5, 5);
 		love.graphics.print("Attention", 5, 30);
+
+		self.birdAnimation:draw(self.birdImage, self.birdPosition.x - 32, self.birdPosition.y);
+		self.birdAnimation:draw(self.birdImage, self.birdPosition.x + 32, self.birdPosition.y);
+		self.birdAnimation:draw(self.birdImage, self.birdPosition.x, self.birdPosition.y - 16);
 
 		love.graphics.setColor(255, 0, 0);
 		love.graphics.rectangle("fill", 80, 5, self.hunger, 18);
