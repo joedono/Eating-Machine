@@ -11,12 +11,17 @@ function State_Game:init()
 	self.oceanImage = love.graphics.newImage("asset/image/ocean.png");
 	self.beachImage = love.graphics.newImage("asset/image/beach.png");
 
+	self.oceanSound = love.audio.newSource("asset/sound/beach.wav", "static");
+	self.oceanSound:setLooping(true);
+	self.oceanSound:setVolume(0.3);
 	self.sharkEatSound = love.audio.newSource("asset/sound/shark-bite.wav", "static");
 	self.sharkEatSound:setLooping(true);
 	self.sharkEatSound:setVolume(0.3);
 
 	self.hudFont = love.graphics.newFont(14);
 	self.active = true;
+
+	self.oceanSound:play();
 end
 
 function State_Game:enter()
@@ -35,6 +40,10 @@ end
 
 function State_Game:resume()
 	self.player:resetKeys();
+end
+
+function State_Game:leave()
+	self.oceanSound:stop();
 end
 
 function State_Game:focus(focused)
