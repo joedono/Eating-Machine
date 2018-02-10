@@ -1,5 +1,4 @@
-require "player";
-
+require "hunter/player";
 require "hunter/manager-hunter";
 require "prey/manager-prey";
 
