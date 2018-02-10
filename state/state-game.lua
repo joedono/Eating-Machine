@@ -14,7 +14,6 @@ function State_Game:init()
 	self.oceanSound:setLooping(true);
 	self.oceanSound:setVolume(0.3);
 	self.sharkEatSound = love.audio.newSource("asset/sound/shark-bite.wav", "static");
-	self.sharkEatSound:setLooping(true);
 	self.sharkEatSound:setVolume(0.3);
 
 	self.birdImage = love.graphics.newImage("asset/image/bird.png");
@@ -44,6 +43,7 @@ function State_Game:enter()
 		self:resetBirds();
 	end);
 
+	self.sharkEatSound:setLooping(true);
 	self.oceanSound:play();
 	self:resetBirds();
 	self.hunger = 100;
@@ -228,8 +228,8 @@ function State_Game:resetBirds()
 	oppositeAngle = oppositeAngle - math.pi * 1/8;
 	oppositeAngle = oppositeAngle + love.math.random() * math.pi * 1/4;
 
-	self.birdPosition.x, self.birdPosition.y = VectorLite.fromPolar(randomAngle, 400);
-	local bx, by = VectorLite.fromPolar(oppositeAngle, 400);
+	self.birdPosition.x, self.birdPosition.y = VectorLite.fromPolar(randomAngle, 500);
+	local bx, by = VectorLite.fromPolar(oppositeAngle, 500);
 
 	self.birdPosition.x = self.birdPosition.x + SCREEN_WIDTH / 2;
 	self.birdPosition.y = self.birdPosition.y + SCREEN_HEIGHT / 2;
@@ -262,7 +262,7 @@ end
 
 function State_Game:loseGame()
 	if KILL_PLAYER then
-		self.sharkEatSound:stop();
+		self.sharkEatSound:setLooping(false);
 		self.oceanSound:stop();
 		GameState.push(State_Losing);
 	end
