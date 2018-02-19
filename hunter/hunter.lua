@@ -118,7 +118,7 @@ function Hunter:updatePatrolling(dt)
 end
 
 function Hunter:updatePursuing(dt)
-	if not self.closestCorpse.active then
+	if self.closestCorpse == nil or not self.closestCorpse.active then
 		self.state = "treading";
 		return;
 	end
